@@ -6,6 +6,7 @@ import { Director } from "./js/Director.js";
 import { Birds } from "./js/player/Birds.js";
 import { StartButton } from "./js/player/StartButton.js";
 import { Score } from "./js/player/Score.js";
+import { Tool } from "./extra.js";
 
 // 程序的主类，用于小游戏过程中数据的初始化，以及点击事件的绑定
 
@@ -13,8 +14,8 @@ export class Main{
     constructor(){
         console.log('游戏开始了');
         // 初始化画布
-        this.canvas = document.getElementById('game');
-        // this.canvas = wx.createCanvas('game');
+        //this.canvas = document.getElementById('game');
+        this.canvas = wx.createCanvas('game');
         this.ctx = this.canvas.getContext('2d');
         // 初始化变量池
         this.loader = new ResourceLoader();
@@ -37,7 +38,10 @@ export class Main{
         this.dataStore.canvas = this.canvas;
         this.dataStore.ctx = this.ctx;
         this.dataStore.res = map;
-
+        const t = new Tool();
+        t.voice('./audio/bgm.mp3',true).play();
+        t.getTelInfo();
+        t.getUserInfo();
         this.init();
         
     }
@@ -67,6 +71,7 @@ export class Main{
     // 绑定单击事件
     gameEvent(){
         this.canvas.addEventListener('touchstart',e=>{
+        // wx.onTouchStart(res=>{
             if(this.director.isGameOver){
                 // 游戏结束,点击重新开始
                 this.init();
